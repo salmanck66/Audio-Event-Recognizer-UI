@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Event Recognizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('assets/images/65744.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .header {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            left: 10px; 
+        }
+        span {
+            color: #28a745;
+        }
+        .container h1 {
+            font-weight: 100;
+        }
+        .content {
+            left: 10px;
+            padding-top: 200px;
+            padding-left: 40px;
+        }
+        .title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .subtitle {
+            font-size: 2rem;
+            color: #28a745; /* Green color */
+            margin-bottom: 20px;
+            margin-top: -20px;
+        }
+        .button {
+            background-color: #28a745; /* Green color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: -20px;
+        }
+        .button:hover {
+            background-color: #218838; /* Darker green color */
+        }   
+        .recording-animation {
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 1s infinite alternate;
+            display: none;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+            }
+            100% {
+                transform: scale(1.2);
+            }
+        }
+        .home-button {
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background-color: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            background-color: #28a745; /* Green color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            margin-top: -20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Audio Event <span>Recognizer</span></h1>
+        </div>
+        <div class="content">
+            <div class="title">Experience real-time</div>
+            <div class="subtitle">audio event detection</div>
+            <button onclick="hide()" class="button">Get Started</button>
+            
+        </div>
+    </div>
+    <div id="recordingAnimation" class="recording-animation" style="margin-top: 65px; margin-left: 90px;"></div>
+</body>
+</html>
+
+<script>
+    var button = document.querySelector(".content");
+    var startButton = document.getElementById("startButton");
+    var recordingAnimation = document.getElementById("recordingAnimation");
+
+    function hide() {
+        button.style.display = "none";
+        var recordingButton = document.createElement("button");
+        recordingButton.innerText = "Start Recording";
+        recordingButton.className = "button";
+        recordingButton.id = "startButton";
+        recordingButton.onclick = startRecording;
+        recordingButton.style.marginTop = "290px";
+        recordingButton.style.marginLeft = "580px";
+        document.querySelector(".header").appendChild(recordingButton);
+
+        // Create Home button
+        var homeButton = document.createElement("button");
+        homeButton.innerText = "Home";
+        homeButton.className = "home-button";
+        homeButton.onclick = redirectToHome;
+        document.body.appendChild(homeButton);
+    }
+
+    function startRecording() {
+        // Ask for microphone access
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function(stream) {
+                // Microphone access granted, you can start recording here
+                console.log("Microphone access granted, start recording...");
+                recordingAnimation.style.display = "block";
+                document.getElementById('startButton').style.display = 'none';
+
+                let recordingButton = document.createElement("button");
+                recordingButton.innerText = "Stop Recording";
+                recordingButton.className = "button";
+                recordingButton.id = "stopButton";
+                recordingButton.onclick = stopRecording;
+                recordingButton.style.marginTop = "290px";
+                recordingButton.style.marginLeft = "580px";
+                document.querySelector(".header").appendChild(recordingButton);
+            })
+            .catch(function(err) {
+                // Microphone access denied or error occurred
+                console.error("Error accessing microphone:", err);
+            });
+    }
+
+    function stopRecording() {
+        recordingAnimation.style.display = "none";
+        document.getElementById('stopButton').style.display = "none";
+        document.getElementById('startButton').style.display = "block";
+    }
+
+    function redirectToHome() {
+        // Redirect to the home page
+        window.location.href = "index.html";
+    }
+</script>
